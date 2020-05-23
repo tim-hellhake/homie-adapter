@@ -1,0 +1,42 @@
+{
+  "manifest_version": 1,
+  "id": "mqtt-adapter",
+  "name": "MQTT",
+  "short_name": "MQTT",
+  "version": "0.1.0",
+  "description": "Connect your mqtt homie (https://homieiot.github.io/) devices",
+  "homepage_url": "https://github.com/tim-hellhake/mqtt-adapter#readme",
+  "license": "MPL-2.0",
+  "author": "Tim Hellhake",
+  "gateway_specific_settings": {
+    "webthings": {
+      "exec": "{nodeLoader} {path}",
+      "strict_min_version": "0.10.0",
+      "strict_max_version": "*",
+      "primary_type": "adapter"
+    }
+  },
+  "options": {
+    "default": {
+      "host": "localhost",
+      "port": "1883"
+    },
+    "schema": {
+      "type": "object",
+      "required": [
+        "host",
+        "port"
+      ],
+      "properties": {
+        "host": {
+          "type": "string",
+          "title": "The hostname of the mqtt broker"
+        },
+        "port": {
+          "type": "integer",
+          "title": "The port of the mqtt broker"
+        }
+      }
+    }
+  }
+}
