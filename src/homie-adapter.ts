@@ -97,8 +97,8 @@ export class MqttAdapter extends Adapter {
       port
     });
 
-    mqtt.on("error", (error) => console.error("Could not connect to mqtt server ", error));
-    mqtt.on("connect", () => console.log("Successfully connected to mqtt server"));
+    mqtt.on("error", (error) => console.error("Could not connect to the mqtt broker", error));
+    mqtt.on("connect", () => console.log("Successfully connected to the mqtt broker"));
     mqtt.on("message", (topic: string, message: Buffer) => this.onMessage(topic, message));
 
     mqtt.subscribe('+/+/#');

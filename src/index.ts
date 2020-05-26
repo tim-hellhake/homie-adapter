@@ -6,6 +6,6 @@
 
 'use strict';
 
-import { MqttAdapter } from './mqtt-adapter';
+import { MqttAdapter } from './homie-adapter';
 
 export = (addonManager: any, manifest: any) => new MqttAdapter(addonManager, manifest);

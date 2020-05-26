@@ -1,8 +1,8 @@
 {
-  "name": "mqtt-adapter",
-  "display_name": "MQTT",
+  "name": "homie-adapter",
+  "display_name": "Homie",
   "version": "0.1.0",
-  "description": "Connect your mqtt homie (https://homieiot.github.io/) devices",
+  "description": "Connect your homie (https://homieiot.github.io/) devices",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -11,20 +11,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tim-hellhake/mqtt-adapter.git"
+    "url": "git+https://github.com/tim-hellhake/homie-adapter.git"
   },
   "author": "Tim Hellhake",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/tim-hellhake/mqtt-adapter/issues"
+    "url": "https://github.com/tim-hellhake/homie-adapter/issues"
   },
-  "homepage": "https://github.com/tim-hellhake/mqtt-adapter#readme",
+  "homepage": "https://github.com/tim-hellhake/homie-adapter#readme",
   "files": [
     "LICENSE",
     "SHA256SUMS",
     "manifest.json",
     "lib/index.js",
-    "lib/mqtt-adapter.js"
+    "lib/homie-adapter.js"
   ],
   "dependencies": {
     "mqtt": "^4.1.0"

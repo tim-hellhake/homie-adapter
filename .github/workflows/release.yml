@@ -37,8 +37,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: mqtt-adapter-${{ env.RELEASE_VERSION }}.tgz
-        asset_name: mqtt-adapter-${{ env.RELEASE_VERSION }}.tgz
+        asset_path: homie-adapter-${{ env.RELEASE_VERSION }}.tgz
+        asset_name: homie-adapter-${{ env.RELEASE_VERSION }}.tgz
         asset_content_type: application/zip
     - name: Upload Release Asset Checksum
       id: upload-release-asset-checksum
@@ -47,6 +47,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: mqtt-adapter-${{ env.RELEASE_VERSION }}.tgz.sha256sum
-        asset_name: mqtt-adapter-${{ env.RELEASE_VERSION }}.tgz.sha256sum
+        asset_path: homie-adapter-${{ env.RELEASE_VERSION }}.tgz.sha256sum
+        asset_name: homie-adapter-${{ env.RELEASE_VERSION }}.tgz.sha256sum
         asset_content_type: text/plain
