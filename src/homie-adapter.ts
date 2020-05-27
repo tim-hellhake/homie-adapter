@@ -6,10 +6,10 @@
 
 import { Adapter, Device, Property } from 'gateway-addon';
 
-import { connect } from 'mqtt'
+import { connect, MqttClient } from 'mqtt'
 
 class HomieDevice extends Device {
-  constructor(private adapter: any, private id: string) {
+  constructor(private adapter: any, private id: string, private mqtt: MqttClient) {
     super(adapter, id);
     this['@context'] = 'https://iot.mozilla.org/schemas/';
     this['@type'] = [];
@@ -18,8 +18,8 @@ class HomieDevice extends Device {
 
   public update(topic: string, payload: string) {
     const [
-      ,
-      ,
+      base,
+      devicePart,
       nodePart,
       propertyPart,
       keyPart
@@ -40,7 +40,15 @@ class HomieDevice extends Device {
 
     if (!property) {
       console.log(`Adding property ${name} to device ${this.id}`)
-      property = new HomieProperty(this, name, {});
+      property = new HomieProperty(this, name, {}, val => new Promise((resolve, reject) => {
+        this.mqtt.publish(`${base}/${devicePart}/${nodePart}/${propertyPart}/set`, `${val}`, {}, (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      }));
       this.properties.set(name, property);
     }
 
@@ -54,6 +62,10 @@ class HomieDevice extends Device {
 }
 
 class HomieProperty extends Property {
+  constructor(device: Device, name: string, propertyDescr: {}, private setter: (value: any) => Promise<void>) {
+    super(device, name, propertyDescr);
+  }
+
   public update(key: string, value: string) {
     console.log(`Updating key ${key} in property ${this.name}`);
 
@@ -65,12 +77,17 @@ class HomieProperty extends Property {
         this.type = value;
         break;
       case '$settable':
-        this.readOnly = !!value;
+        this.readOnly = value != 'true';
         break;
       case '$unit':
         this.unit = value;
         break;
     }
+  }
+
+  async setValue(value: any): Promise<void> {
+    await this.setter(value);
+    super.setValue(value);
   }
 }
 
@@ -99,12 +116,12 @@ export class MqttAdapter extends Adapter {
 
     mqtt.on("error", (error) => console.error("Could not connect to the mqtt broker", error));
     mqtt.on("connect", () => console.log("Successfully connected to the mqtt broker"));
-    mqtt.on("message", (topic: string, message: Buffer) => this.onMessage(topic, message));
+    mqtt.on("message", (topic: string, message: Buffer) => this.onMessage(topic, message, mqtt));
 
     mqtt.subscribe('+/+/#');
   }
 
-  private onMessage(topic: string, payload: Buffer) {
+  private onMessage(topic: string, payload: Buffer, mqtt: MqttClient) {
     const [
       ,
       devicePart
@@ -116,7 +133,7 @@ export class MqttAdapter extends Adapter {
 
       if (!device) {
         console.log(`Creating new device for ${id}`);
-        device = new HomieDevice(this, id);
+        device = new HomieDevice(this, id, mqtt);
         this.devicesById[id] = device;
         this.handleDeviceAdded(device);
       }
