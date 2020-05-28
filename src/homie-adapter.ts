@@ -76,6 +76,18 @@ class HomieProperty extends Property {
       case '$datatype':
         this.type = value;
         break;
+      case '$format':
+        try {
+          const match = /(\d+):(\d+)/g.exec(value);
+          if (match && match.length > 2) {
+            this.minimum = parseInt(match[1]);
+            this.maximum = parseInt(match[2]);
+            this["@type"] = 'LevelProperty';
+          }
+        } catch (e) {
+          console.warn(`Could not parse $format: ${e}`);
+        }
+        break;
       case '$settable':
         this.readOnly = value != 'true';
         break;

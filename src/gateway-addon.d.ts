@@ -6,13 +6,15 @@
 
 declare module 'gateway-addon' {
     class Property {
-        protected '@type': string[];
+        protected '@type': string;
         protected name: string;
         protected title: string;
         protected type: string;
         protected readOnly: boolean;
         protected unit: string;
         protected device: Device;
+        public minimum: number;
+        public maximum: number;
         constructor(device: Device, name: string, propertyDescr: {});
         public setCachedValueAndNotify(value: any): void;
         public setValue(value: any): Promise<void>
