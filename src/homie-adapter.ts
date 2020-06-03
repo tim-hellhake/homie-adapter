@@ -93,6 +93,23 @@ class HomieProperty extends Property {
         break;
       case '$unit':
         this.unit = value;
+        switch (value) {
+          case '°C':
+            this['@type'] = 'TemperatureProperty'
+            break;
+          case 'V':
+            this['@type'] = 'VoltageProperty'
+            break;
+          case 'W':
+            this['@type'] = 'InstantaneousPowerProperty'
+            break;
+          case 'A':
+            this['@type'] = 'CurrentProperty'
+            break;
+          case '%':
+            this['@type'] = 'LevelProperty'
+            break;
+        }
         break;
     }
   }
