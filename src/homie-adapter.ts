@@ -74,7 +74,26 @@ class HomieProperty extends Property {
         this.title = value;
         break;
       case '$datatype':
-        this.type = value;
+        switch (value) {
+          case 'integer':
+            this.type = 'integer';
+            break;
+          case 'float':
+            this.type = 'number';
+            break;
+          case 'boolean':
+            this.type = 'boolean';
+            break;
+          case 'string':
+          case 'enum':
+          case 'color':
+            this.type = 'string';
+            break;
+          default:
+            console.warn(`Invalid type ${value}, falling back to string`);
+            this.type = 'string';
+            break;
+        }
         break;
       case '$format':
         try {
