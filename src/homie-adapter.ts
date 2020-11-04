@@ -30,7 +30,9 @@ class HomieDevice extends Device {
       return;
     }
 
-    if (!propertyPart) {
+    // TODO: meta tags at property level are not verified right now and we can safely ignore this for now.
+    // Also ignoring meta tags here makes sure they are not added as ThingProperty either.
+    if (!propertyPart || propertyPart.startsWith('$')) {
       return;
     }
 
