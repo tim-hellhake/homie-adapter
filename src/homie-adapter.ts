@@ -30,7 +30,9 @@ class HomieDevice extends Device {
       return;
     }
 
-    if (!propertyPart) {
+    // TODO: meta tags at property level are not verified right now and we can safely ignore this for now.
+    // Also ignoring meta tags here makes sure they are not added as ThingProperty either.
+    if (!propertyPart || propertyPart.startsWith('$')) {
       return;
     }
 
@@ -56,7 +58,7 @@ class HomieDevice extends Device {
       property.update(keyPart, payload);
       this.adapter.handleDeviceAdded(this);
     } else {
-      property.setCachedValueAndNotify(payload);
+      property.castPayloadAndNotify(payload);
     }
   }
 }
@@ -64,6 +66,7 @@ class HomieDevice extends Device {
 class HomieProperty extends Property {
   constructor(device: Device, name: string, propertyDescr: {}, private setter: (value: any) => Promise<void>) {
     super(device, name, propertyDescr);
+    this.type = 'string';
   }
 
   public update(key: string, value: string) {
@@ -131,6 +134,30 @@ class HomieProperty extends Property {
         }
         break;
     }
+  }
+
+  public castPayloadAndNotify(payload: string) {
+    let castedPayload: any;
+    switch (this.type) {
+      case 'integer':
+      case 'number':
+        castedPayload = Number(payload);
+        break;
+      case 'boolean':
+        castedPayload = Boolean(payload);
+        break;
+      case 'string':
+      case 'enum':
+      case 'color':
+        castedPayload = payload;
+        break;
+      default:
+        console.warn(`Invalid type ${this.type}, falling back to string. Value arrived before type message.`);
+        castedPayload = payload;
+        break;
+    }
+
+    this.setCachedValueAndNotify(castedPayload);
   }
 
   async setValue(value: any): Promise<void> {
