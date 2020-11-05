@@ -3,7 +3,7 @@
   "id": "homie-adapter",
   "name": "Homie",
   "short_name": "Homie",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Connect your homie (https://homieiot.github.io/) devices",
   "homepage_url": "https://github.com/tim-hellhake/homie-adapter#readme",
   "license": "MPL-2.0",
